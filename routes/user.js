@@ -79,6 +79,12 @@ router.post("/login", isNotLoggedIn, (req, res, next) => {
           },
         ],
       });
+
+      //=================================================================
+      //   const fullUserWithoutPassword = Object.assign({}, user);
+      //   console.log("로그인 성공 :", fullUserWithoutPassword);
+      console.log("로그인 성공");
+
       return res.status(200).json(fullUserWithoutPassword);
     });
   })(req, res, next);
@@ -89,7 +95,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
   try {
     const exUser = await User.findOne({
       where: {
-        userId: req.body.userId,
+        email: req.body.email,
       },
     });
     if (exUser) {
@@ -97,7 +103,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
     }
     const hashedPassword = await bcrypt.hash(req.body.password, 12);
     await User.create({
-      userId: req.body.email,
+      email: req.body.email,
       nickname: req.body.nickname,
       password: hashedPassword,
     });
@@ -111,6 +117,7 @@ router.post("/", isNotLoggedIn, async (req, res, next) => {
 router.post("/logout", isLoggedIn, (req, res) => {
   req.logout();
   req.session.destroy();
+  console.log("로그아웃 되었습니다!");
   res.send("ok");
 });
 

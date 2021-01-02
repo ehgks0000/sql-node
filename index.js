@@ -11,7 +11,7 @@ const postRouter = require("./routes/post");
 const postsRouter = require("./routes/posts");
 const userRouter = require("./routes/user");
 const db = require("./models");
-// const passportConfig = require("./passport");
+const passportConfig = require("./passport");
 
 dotenv.config();
 const app = express();
@@ -21,14 +21,22 @@ db.sequelize
     console.log("db 연결 성공");
   })
   .catch(console.error);
-// passportConfig();
+passportConfig();
 
 app.use(morgan("dev"));
 
 // app.use("/", express.static(path.join(__dirname, "uploads")));
+
+app.use(
+  cors({
+    origin: true,
+    // origin: "http://localhost:3000",
+    credentials: true, // 이 2개가 프론트와 백엔드 쿠키 주고박기 가능하게 해줌(서로 서버가 다를 때)
+  })
+);
 app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
-app.use(cors());
+
 app.use(cookieParser(process.env.COOKIE_SECRET));
 app.use(
   session({
@@ -39,6 +47,7 @@ app.use(
       httpOnly: true,
       secure: false, // https 사용 시 true
     },
+    name: "klajslgkasd", //익스프레스 디폴트 이름이 connect.sid << 보안ㅇ취약할 수 있으니 이름을 무분별하게 지정
   })
 );
 app.use(passport.initialize());
