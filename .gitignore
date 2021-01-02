@@ -1,5 +1,7 @@
-/config
+# /config
 node_modules
 /node_modules
 migrations
 seeders
+.env
+env

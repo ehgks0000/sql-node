@@ -1,6 +1,6 @@
 module.exports = (sequelize, DataTypes) => {
-  const Image = sequelize.define(
-    "Image",
+  const Comment = sequelize.define(
+    "Comment",
     {
       content: {
         type: DataTypes.TEXT,
@@ -10,9 +10,10 @@ module.exports = (sequelize, DataTypes) => {
     { charset: "utf8mb4", collate: "utf8mb4_general_ci" } // 한글 저장 설정
   );
 
-  Image.associate = (db) => {
-    db.User.belongsTo(db.Comment); // 게시글이 이미지를 여러개 가질수있음
+  Comment.associate = (db) => {
+    db.User.belongsTo(db.User); // 글을 많이 적을수 있다
+    db.User.belongsTo(db.Post); // 코멘트를 많이 할 수 있다.
   };
 
-  return Image;
+  return Comment;
 };
